@@ -1,14 +1,16 @@
 from sklearn.base import BaseEstimator
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, learning_curve
+from sklearn.linear_model import Ridge
 from sklearn.model_selection._split import KFold
-from nltk.corpus.reader.wordlist import WordListCorpusReader
+from numpy import linspace
 from nltk.corpus import movie_reviews
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import word_tokenize, WordPunctTokenizer, RegexpTokenizer
 from nltk.corpus import wordnet
 import random
+import matplotlib.pyplot as plt
 
 class BaseAdvertiseClassifier(BaseEstimator):
     """
@@ -60,7 +62,7 @@ class BaseAdvertiseClassifier(BaseEstimator):
         return [word for word in document if word not in self.stopwords]
 
     def preproccesor(self, document):
-        tokens = self.delete_stopwords(self.tokenizer.tokenize(document))
+        tokens = self.delete_stopwords(word_tokenize(document))
         return [self.stemer.stem(token) for token in tokens]
 
     def tf_vectorizer(self, X):
@@ -73,6 +75,21 @@ class BaseAdvertiseClassifier(BaseEstimator):
 
     def transform(self, X):
         return self.fitted_vectorizer.transform(X)
+
+    def plot_learning_curve(self, X, y, train_sizes = None, k = 5):
+        if train_sizes == None:
+            train_sizes = linspace(0.1, 1.0, 5)
+
+        train_size, train_scores, valid_scores = learning_curve(self, X, y, train_sizes= train_sizes, n_jobs =- 1, shuffle = True, cv = k)
+        ytrain = [sum(scores)/len(scores) for scores in train_scores]
+        yvalid = [sum(scores)/len(scores) for scores in valid_scores]
+
+        train_line = plt.plot(train_size, ytrain)
+        valid_line = plt.plot(train_size, yvalid)
+
+        plt.setp(train_line, color = 'r', linewidth = 2.0)
+        plt.setp(valid_line, color = 'b', linewidth = 2.0)
+        plt.show()
 
     def cross_validation_score(self, X, y, k = 10, n_jobs = None):
         random.seed(9)
