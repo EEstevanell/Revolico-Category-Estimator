@@ -1,4 +1,4 @@
-from base import BaseAdvertiseClassifier, movie_reviews_test
+from .base import BaseAdvertiseClassifier, movie_reviews_test
 from sklearn.naive_bayes import MultinomialNB
 
 class MultinomialNBClassifier(BaseAdvertiseClassifier):

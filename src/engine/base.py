@@ -6,7 +6,7 @@ from nltk.corpus.reader.wordlist import WordListCorpusReader
 from nltk.corpus import movie_reviews
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
-from nltk.tokenize import word_tokenize, WordPunctTokenizer
+from nltk.tokenize import word_tokenize, WordPunctTokenizer, RegexpTokenizer
 from nltk.corpus import wordnet
 import random
 
@@ -39,6 +39,7 @@ class BaseAdvertiseClassifier(BaseEstimator):
     def __init__(self, language = 'english', vectorizer = 'tf_vectorizer'):
         self.classifier = None
         self.punct_tokenizer = WordPunctTokenizer()
+        self.tokenizer = RegexpTokenizer('[a-zA-z]+')
         self.language = language
         self.stopwords = stopwords.words(language)
         self.stemer = SnowballStemmer(language)
@@ -59,7 +60,7 @@ class BaseAdvertiseClassifier(BaseEstimator):
         return [word for word in document if word not in self.stopwords]
 
     def preproccesor(self, document):
-        tokens = self.delete_stopwords(word_tokenize(document))
+        tokens = self.delete_stopwords(self.tokenizer.tokenize(document))
         return [self.stemer.stem(token) for token in tokens]
 
     def tf_vectorizer(self, X):
@@ -128,5 +129,4 @@ def movie_reviews_test( estimator, k = 10, n_jobs = -1):
     Programmed test to any estimator that implements BaseAdvertiseClassifier
     """
     X, y = load_movie_reviews()
-    estimator = LinearSVClassifier()
     estimator.cross_validation_score(X, y, k = k, n_jobs = n_jobs)

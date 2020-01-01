@@ -1,4 +1,4 @@
-from base import BaseAdvertiseClassifier, movie_reviews_test
+from .base import BaseAdvertiseClassifier, movie_reviews_test
 from sklearn.linear_model import LogisticRegression
 
 class LogisticRegressionClassifier(BaseAdvertiseClassifier):
@@ -14,3 +14,6 @@ class LogisticRegressionClassifier(BaseAdvertiseClassifier):
         params = {'penalty': self.penalty}
         params.update(super().get_params(deep))
         return params
+
+
+# movie_reviews_test(LogisticRegressionClassifier())

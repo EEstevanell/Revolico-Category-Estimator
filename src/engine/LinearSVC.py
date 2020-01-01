@@ -1,4 +1,4 @@
-from base import BaseAdvertiseClassifier, movie_reviews_test
+from .base import BaseAdvertiseClassifier, movie_reviews_test
 from sklearn.svm import LinearSVC
 
 class LinearSVClassifier(BaseAdvertiseClassifier):
@@ -14,3 +14,5 @@ class LinearSVClassifier(BaseAdvertiseClassifier):
         params = {}
         params.update(super().get_params(deep))
         return params
+
+# movie_reviews_test(LinearSVClassifier())
