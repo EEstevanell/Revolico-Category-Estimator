@@ -1,4 +1,4 @@
-# scikit_learn == 0.22numpy == 1.16.3Revolico-Category-Estimator
+# Revolico-Category-Estimator
 
 El objetivo principal de este proyecto es implementar estimadores que logren clasificar correctamente un bloque de texto en una de las categorías disponibles en el popular sitio de compra y venta cubana **Revolico**.
 
@@ -36,6 +36,6 @@ El fichero **main.py** presenta una gamas de funciones que permiten trabajar dir
 ## Requerimientos
 
 - [x] matplotlib == 3.0.3
-- [x] nltk == 3.4.3
+- [x] nltk == 3.4.5
 - [x] numpy == 1.16.3
 - [x] scikit_learn == 0.22
