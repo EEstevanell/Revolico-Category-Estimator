@@ -198,9 +198,13 @@ def get_strattified_data(X, y, step = 100):
         yield (ret_X, ret_y)
 
 # plot_learning_curves(X, y, 2)
-# run(X, y, k = 15)
-if __name__ == '__main__':
-    X, y = load_corpus(corpus_data_path)
-    estimators = fit(X, y)
-    results = predict(["laptop de 15 pulgadas"], estimators)
-    print(results)
+X, y = load_corpus(corpus_data_path)
+run(X, y, k = 10)
+
+X, y = load_movie_reviews()
+run(X, y, k = 10)
+ 
+# if __name__ == '__main__':
+#     estimators = fit(X, y)
+#     results = predict(["laptop de 15 pulgadas"], estimators)
+#     print(results)
