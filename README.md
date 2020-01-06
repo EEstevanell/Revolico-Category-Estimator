@@ -35,7 +35,9 @@ El fichero **main.py** presenta una gama de funciones que permiten trabajar dire
 
 ## Requerimientos
 
-- [x] matplotlib == 3.0.3
-- [x] nltk == 3.4.5
-- [x] numpy == 1.16.3
-- [x] scikit_learn == 0.22
+- [x] Flask==1.0.2
+- [x] matplotlib==3.0.3
+- [x] Scrapy==1.7.3
+- [x] nltk==3.4.5
+- [x] numpy==1.16.3
+- [x] scikit_learn==0.22.1
