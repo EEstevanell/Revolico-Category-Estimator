@@ -9,7 +9,7 @@ import pickle
 import os
 import matplotlib.pyplot as plt
 
-raw_data_path = R"C:\Users\Ernesto Estevanell\Documents\GitHub\Revolico-Category-Estimator\src\data"
+raw_data_path = R"C:\Users\Ernesto Estevanell\Documents\Revolico-Category-Estimator\Revolico-Category-Estimator\craw\websites"
 corpus_data_path = R"C:\Users\Ernesto Estevanell\Documents\GitHub\Revolico-Category-Estimator\src\data\corpus"
 
 def get_raw_data(path, max_depth = 4):
@@ -196,15 +196,13 @@ def get_strattified_data(X, y, step = 100):
             ret_y += ys
 
         yield (ret_X, ret_y)
-
-# plot_learning_curves(X, y, 2)
-X, y = load_corpus(corpus_data_path)
-run(X, y, k = 10)
-
-X, y = load_movie_reviews()
-run(X, y, k = 10)
  
+X, y = get_raw_data(raw_data_path, 1)
+
+save_corpus(corpus_data_path, X, y)
+
 # if __name__ == '__main__':
+#     X, y = load_corpus(corpus_data_path)
 #     estimators = fit(X, y)
 #     results = predict(["laptop de 15 pulgadas"], estimators)
 #     print(results)

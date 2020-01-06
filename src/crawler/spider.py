@@ -1,5 +1,4 @@
 import scrapy
-import html2text
 import pickle
 
 from scrapy.linkextractors import LinkExtractor

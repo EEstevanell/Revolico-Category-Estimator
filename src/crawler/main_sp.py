@@ -1,7 +1,6 @@
 from crawler.spider import *
 import os
 import pickle
-import html2text
 from scrapy.crawler import CrawlerProcess
 
 def get_file_text(filename):
