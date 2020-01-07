@@ -2,7 +2,6 @@
 from flask import Flask,render_template,request,make_response, session, send_from_directory
 from main import *
 from crawler.main_sp import *
-from crawler.main_sp import *
 import os
 from multiprocessing import Process
 import json
