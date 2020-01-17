@@ -2,6 +2,7 @@ from engine.LinearSVC import LinearSVClassifier
 from engine.base import load_movie_reviews
 from engine.LogisticRegression import LogisticRegressionClassifier
 from engine.MultinomialNB import MultinomialNBClassifier
+from engine.CustomEstimator import CustomEstimator
 from sklearn.model_selection import learning_curve, cross_validate
 from multiprocessing import Process, Manager
 import threading
@@ -9,7 +10,7 @@ import pickle
 import os
 import matplotlib.pyplot as plt
 
-raw_data_path = R"C:\Users\Ernesto Estevanell\Documents\Revolico-Category-Estimator\Revolico-Category-Estimator\craw\websites"
+raw_data_path = R"C:\Users\Ernesto Estevanell\Downloads\Telegram Desktop\crawlerV2\crawler\craw\websites"
 corpus_data_path = R"C:\Users\Ernesto Estevanell\Documents\GitHub\Revolico-Category-Estimator\src\data\corpus"
 
 def get_raw_data(path, max_depth = 4):
@@ -92,18 +93,22 @@ def fit(X, y, vectorizer = 'tf_vectorizer', language = 'spanish'):
     svm = LinearSVClassifier(language = language, vectorizer=vectorizer)
     mnb = MultinomialNBClassifier(language = language, vectorizer=vectorizer)
     lr = LogisticRegressionClassifier(language = language, vectorizer=vectorizer)
+    ce = CustomEstimator(language = language, vectorizer=vectorizer)
 
     p1 = Process(target = _fit, args = (svm, X, y, return_list))
     p2 = Process(target = _fit, args = (mnb, X, y, return_list))
     p3 = Process(target = _fit, args = (lr, X, y, return_list))
+    p4 = Process(target = _fit, args = (ce, X, y, return_list))
 
     p1.start()
     p2.start()
     p3.start()
+    p4.start()
 
     p1.join()
     p2.join()
     p3.join()
+    p4.join()
     
     return return_list
 
@@ -114,6 +119,7 @@ def plot_learning_curves(X, y, k = 5):
     mnb = MultinomialNBClassifier(language='spanish')
     svm = LinearSVClassifier(language='spanish')
     lr = LogisticRegressionClassifier(language='spanish')
+    ce = CustomEstimator(language='spanish')
 
     data_sizes = []
 
@@ -125,6 +131,9 @@ def plot_learning_curves(X, y, k = 5):
 
     lr_train_score = []
     lr_valid_score = []
+
+    ce_train_score = []
+    ce_valid_score = []
 
     for X_new, y_new in get_strattified_data(X, y, step = 500):
         data_sizes.append(len(X_new))
@@ -140,6 +149,11 @@ def plot_learning_curves(X, y, k = 5):
         lr_scores = cross_validate(lr, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
         lr_train_score.append(sum(lr_scores['train_score'])/len(lr_scores['train_score']))
         lr_valid_score.append(sum(lr_scores['test_score'])/len(lr_scores['test_score']))
+
+        print("starting evaluation with size:", len(X_new))
+        ce_scores = cross_validate(ce, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
+        ce_train_score.append(sum(ce_scores['train_score'])/len(ce_scores['train_score']))
+        ce_valid_score.append(sum(ce_scores['test_score'])/len(ce_scores['test_score']))
 
     plt.figure(1)
     plt.plot(data_sizes, mnb_train_score, 'o-r')
@@ -164,6 +178,15 @@ def plot_learning_curves(X, y, k = 5):
     plt.xlabel('Dataset Size')
     plt.ylabel('Score')
     plt.title('Logistic Regression')
+    plt.legend(['Train Score', 'Validation Score'])
+    plt.show()
+
+    plt.figure(1)
+    plt.plot(data_sizes, ce_train_score, 'o-r')
+    plt.plot(data_sizes, ce_valid_score, 'o-b')
+    plt.xlabel('Dataset Size')
+    plt.ylabel('Score')
+    plt.title('Multilayer Perceptron (27 neurons x 2 layers) (activation = tanh)')
     plt.legend(['Train Score', 'Validation Score'])
     plt.show()
 
@@ -197,12 +220,12 @@ def get_strattified_data(X, y, step = 100):
 
         yield (ret_X, ret_y)
  
-X, y = get_raw_data(raw_data_path, 1)
-
-save_corpus(corpus_data_path, X, y)
+# X, y = get_raw_data(raw_data_path, 1)
+# save_corpus(corpus_data_path, X, y)
 
 # if __name__ == '__main__':
 #     X, y = load_corpus(corpus_data_path)
+#     plot_learning_curves(X, y)
 #     estimators = fit(X, y)
 #     results = predict(["laptop de 15 pulgadas"], estimators)
 #     print(results)

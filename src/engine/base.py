@@ -62,7 +62,7 @@ class BaseAdvertiseClassifier(BaseEstimator):
         return [word for word in document if word not in self.stopwords]
 
     def preproccesor(self, document):
-        tokens = self.delete_stopwords(word_tokenize(document))
+        tokens = self.delete_stopwords(self.tokenizer.tokenize(document))
         return [self.stemer.stem(token) for token in tokens]
 
     def tf_vectorizer(self, X):
