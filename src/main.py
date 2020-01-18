@@ -137,49 +137,61 @@ def plot_learning_curves(X, y, k = 5):
 
     for X_new, y_new in get_strattified_data(X, y, step = 500):
         data_sizes.append(len(X_new))
-
-        mnb_scores = cross_validate(mnb, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
-        mnb_train_score.append(sum(mnb_scores['train_score'])/len(mnb_scores['train_score']))
-        mnb_valid_score.append(sum(mnb_scores['test_score'])/len(mnb_scores['test_score']))
-
-        svm_scores = cross_validate(svm, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
-        svm_train_score.append(sum(svm_scores['train_score'])/len(svm_scores['train_score']))
-        svm_valid_score.append(sum(svm_scores['test_score'])/len(svm_scores['test_score']))
-
-        lr_scores = cross_validate(lr, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
-        lr_train_score.append(sum(lr_scores['train_score'])/len(lr_scores['train_score']))
-        lr_valid_score.append(sum(lr_scores['test_score'])/len(lr_scores['test_score']))
-
         print("starting evaluation with size:", len(X_new))
+
+        # print("running MNB")
+        # mnb_scores = cross_validate(mnb, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
+        # mnb_train_score.append(sum(mnb_scores['train_score'])/len(mnb_scores['train_score']))
+        # mnb_valid_score.append(sum(mnb_scores['test_score'])/len(mnb_scores['test_score']))
+        # mnb_score = sum(mnb_scores['test_score'])/len(mnb_scores['test_score'])
+
+        # print("running SVM")
+        # svm_scores = cross_validate(svm, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
+        # svm_train_score.append(sum(svm_scores['train_score'])/len(svm_scores['train_score']))
+        # svm_valid_score.append(sum(svm_scores['test_score'])/len(svm_scores['test_score']))
+        # svm_score = sum(svm_scores['test_score'])/len(svm_scores['test_score'])
+
+        # print("running LR")
+        # lr_scores = cross_validate(lr, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
+        # lr_train_score.append(sum(lr_scores['train_score'])/len(lr_scores['train_score']))
+        # lr_valid_score.append(sum(lr_scores['test_score'])/len(lr_scores['test_score']))
+        # lr_score = sum(lr_scores['test_score'])/len(lr_scores['test_score'])
+
+        print("running MLP")
         ce_scores = cross_validate(ce, X_new, y_new, cv = k, n_jobs = -1, return_train_score = True)
         ce_train_score.append(sum(ce_scores['train_score'])/len(ce_scores['train_score']))
         ce_valid_score.append(sum(ce_scores['test_score'])/len(ce_scores['test_score']))
+        ce_score = sum(ce_scores['test_score'])/len(ce_scores['test_score'])
+        mnb_score = 0
+        svm_score = 0
+        lr_score = 0
+        print(f"ended evaluation with results:\nMNB:{mnb_score}\nSVM:{svm_score}\nLR:{lr_score}\nMLP:{ce_score}")
 
-    plt.figure(1)
-    plt.plot(data_sizes, mnb_train_score, 'o-r')
-    plt.plot(data_sizes, mnb_valid_score, 'o-b')
-    plt.xlabel('Dataset Size')
-    plt.ylabel('Score')
-    plt.title('Multinomial Naive Bayes')
-    plt.legend(['Train Score', 'Validation Score'])
+    # plt.figure(1)
+    # plt.plot(data_sizes, mnb_train_score, 'o-r')
+    # plt.plot(data_sizes, mnb_valid_score, 'o-b')
+    # plt.xlabel('Dataset Size')
+    # plt.ylabel('Score')
+    # plt.title('Multinomial Naive Bayes')
+    # plt.legend(['Train Score', 'Validation Score'])
 
-    plt.figure(2)
-    plt.plot(data_sizes, svm_train_score, 'o-r')
-    plt.plot(data_sizes, svm_valid_score, 'o-b')
-    plt.xlabel('Dataset Size')
-    plt.ylabel('Score')
-    plt.title('Support Vector Machine (Linear Kernel)')
-    plt.legend(['Train Score', 'Validation Score'])
+    # plt.figure(2)
+    # plt.plot(data_sizes, svm_train_score, 'o-r')
+    # plt.plot(data_sizes, svm_valid_score, 'o-b')
+    # plt.xlabel('Dataset Size')
+    # plt.ylabel('Score')
+    # plt.title('Support Vector Machine (Linear Kernel)')
+    # plt.legend(['Train Score', 'Validation Score'])
 
 
-    plt.figure(3)
-    plt.plot(data_sizes, lr_train_score, 'o-r')
-    plt.plot(data_sizes, lr_valid_score, 'o-b')
-    plt.xlabel('Dataset Size')
-    plt.ylabel('Score')
-    plt.title('Logistic Regression')
-    plt.legend(['Train Score', 'Validation Score'])
-    plt.show()
+    # plt.figure(3)
+    # plt.plot(data_sizes, lr_train_score, 'o-r')
+    # plt.plot(data_sizes, lr_valid_score, 'o-b')
+    # plt.xlabel('Dataset Size')
+    # plt.ylabel('Score')
+    # plt.title('Logistic Regression')
+    # plt.legend(['Train Score', 'Validation Score'])
+    # plt.show()
 
     plt.figure(1)
     plt.plot(data_sizes, ce_train_score, 'o-r')
@@ -223,9 +235,9 @@ def get_strattified_data(X, y, step = 100):
 # X, y = get_raw_data(raw_data_path, 1)
 # save_corpus(corpus_data_path, X, y)
 
-# if __name__ == '__main__':
-#     X, y = load_corpus(corpus_data_path)
-#     plot_learning_curves(X, y)
+if __name__ == '__main__':
+    X, y = load_corpus(corpus_data_path)
+    plot_learning_curves(X, y)
 #     estimators = fit(X, y)
 #     results = predict(["laptop de 15 pulgadas"], estimators)
 #     print(results)
